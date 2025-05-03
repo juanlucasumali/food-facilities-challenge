@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import text, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db import get_db
@@ -6,6 +8,34 @@ from app.models import FoodTruck
 from app.routers import foodtrucks
 
 app = FastAPI(title="SF Food Trucks API", version="0.0.1")
+
+# Configure CORS
+origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
+# Add a middleware to handle CORS headers for all responses
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,  # Cache preflight requests for 1 hour
+)
+
+# Add a middleware to handle CORS headers for all responses
+@app.middleware("http")
+async def add_cors_headers(request: Request, call_next):
+    response = await call_next(request)
+    origin = request.headers.get("origin")
+    if origin in origins:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
 app.include_router(foodtrucks.router) # register router
 
 # Basic route to check if the app is running
