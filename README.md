@@ -45,7 +45,7 @@
 
 7. **Initialize the Database**
 
-    Open a new terminal window, activate the environment again:
+    Open a new terminal window, activate the environment again and initialize the database:
 
     ```bash
     source .venv/bin/activate
