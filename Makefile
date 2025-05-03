@@ -4,7 +4,7 @@ run:
 	docker compose up --build
 
 test:
-	pytest -q
+	pytest -q -s
 
 init-db:
 	python scripts/init_and_load.py

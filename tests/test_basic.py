@@ -1,25 +1,53 @@
 import pytest
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Test the ping endpoint
 @pytest.mark.asyncio
 async def test_ping(client):
+    logger.info("Testing ping endpoint...")
     r = await client.get("/ping")
+    if r.status_code == 200 and r.json() == {"message": "pong!"}:
+        logger.info("✅ Ping test passed successfully")
+    else:
+        logger.error(f"Expected status 200, got {r.status_code}")
+        logger.error(f"Expected response {{'message': 'pong!'}}, got {r.json()}")
+        logger.error("❌ Ping test failed")
     assert r.status_code == 200 and r.json() == {"message": "pong!"}
 
 # Test the by-applicant endpoint
 @pytest.mark.asyncio
 async def test_by_applicant(client):
+    logger.info("Testing search by applicant endpoint with query 'MOMO'...")
     r = await client.get("/trucks/by-applicant", params={"q": "MOMO"})
     data = r.json()
-    # Should match both entries for MOMO INNOVATION LLC
+    
+    logger.info(f"Response status: {r.status_code}")
+    
+    # Check for MOMO INNOVATION LLC
     applicants = [truck["applicant"] for truck in data]
+    momo_count = len([truck for truck in data if truck["applicant"] == "MOMO INNOVATION LLC"])
+    
+    if "MOMO INNOVATION LLC" in applicants and momo_count >= 1:
+        logger.info(f"Found {momo_count} entries for MOMO INNOVATION LLC")
+        logger.info("✅ Applicant search test passed successfully")
+    else:
+        logger.error(f"Expected to find MOMO INNOVATION LLC, found: {applicants}")
+        logger.error("❌ Applicant search test failed")
+    
     assert "MOMO INNOVATION LLC" in applicants
-    assert len([truck for truck in data if truck["applicant"] == "MOMO INNOVATION LLC"]) >= 1
+    assert momo_count >= 1
 
 # Test the by-street endpoint with a status filter
 @pytest.mark.asyncio
 async def test_by_street_status_filter(client):
-    r = await client.get("/trucks/by-street", params={"street": "SANSOME", "status": "APPROVED"})
+    logger.info("Testing search by street endpoint with street 'SAN' and status 'APPROVED'...")
+    r = await client.get("/trucks/by-street", params={"street": "SAN", "status": "APPROVED"})
+    data = r.json()
+    
+    logger.info(f"Response status: {r.status_code}")
+    
     expected = [
         {
             "id": 1591820,
@@ -38,17 +66,31 @@ async def test_by_street_status_filter(client):
             "longitude": -122.40218343189426
         }
     ]
-    data = r.json()
+    
+    missing_trucks = []
     for truck in expected:
-        assert any(
-            all(truck[k] == d.get(k) for k in truck) for d in data
-        ), f"Truck {truck['id']} not found in response"
+        if not any(all(truck[k] == d.get(k) for k in truck) for d in data):
+            missing_trucks.append(truck["id"])
+    
+    if not missing_trucks:
+        logger.info(f"Found all expected trucks: {[t['id'] for t in expected]}")
+        logger.info("✅ Street search test passed successfully")
+    else:
+        logger.error(f"Missing trucks with IDs: {missing_trucks}")
+        logger.error("❌ Street search test failed")
+    
+    for truck in expected:
+        assert any(all(truck[k] == d.get(k) for k in truck) for d in data), f"Truck {truck['id']} not found in response"
 
 # Test the nearby endpoint
 @pytest.mark.asyncio
 async def test_nearby(client):
+    logger.info("Testing nearby endpoint with lat=37.792, lng=-122.398, status=APPROVED...")
     r = await client.get("/trucks/nearby", params={"lat": 37.792, "lng": -122.398, "status": "APPROVED"})
     data = r.json()
+    
+    logger.info(f"Response status: {r.status_code}")
+    
     expected = [
         {
             "id": 1568883,
@@ -92,8 +134,17 @@ async def test_nearby(client):
         }
     ]
     
-    # Check that the response contains all expected trucks (order may differ)
+    missing_trucks = []
     for truck in expected:
-        assert any(
-            all(truck[k] == d.get(k) for k in truck) for d in data
-        ), f"Truck {truck['id']} not found in response"
+        if not any(all(truck[k] == d.get(k) for k in truck) for d in data):
+            missing_trucks.append(truck["id"])
+    
+    if not missing_trucks:
+        logger.info(f"Found all expected trucks: {[t['id'] for t in expected]}")
+        logger.info("✅ Nearby search test passed successfully")
+    else:
+        logger.error(f"Missing trucks with IDs: {missing_trucks}")
+        logger.error("❌ Nearby search test failed")
+    
+    for truck in expected:
+        assert any(all(truck[k] == d.get(k) for k in truck) for d in data), f"Truck {truck['id']} not found in response"

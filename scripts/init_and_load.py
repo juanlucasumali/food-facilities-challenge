@@ -8,21 +8,8 @@ def run_command(command):
     result = subprocess.run(command, shell=True, check=True)
     return result.returncode == 0
 
-def install_requirements():
-    """Install required Python packages."""
-    print("Installing required packages...")
-    requirements_cmd = "pip install -r requirements.txt"
-    if not run_command(requirements_cmd):
-        print("Error installing requirements")
-        return False
-    return True
-
 def main():
     print("Starting database initialization and data loading...")
-    
-    # Step 0: Install requirements
-    if not install_requirements():
-        return
     
     # Step 1: Initialize the database
     print("\n1. Initializing database...")
