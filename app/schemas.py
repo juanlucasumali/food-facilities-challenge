@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class FoodTruckOut(BaseModel):
     id: int
@@ -8,5 +8,4 @@ class FoodTruckOut(BaseModel):
     latitude: float
     longitude: float
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
