@@ -3,6 +3,7 @@
 <img width="1037" alt="Screenshot 2025-05-03 at 11 50 27 AM" src="https://github.com/user-attachments/assets/dfd02fdf-8bd4-4daf-b155-7acd7eeacd76" />
 
 ## 📜 How to run and test the app
+#### <a href="https://youtu.be/A0T8NDhcKqU" target="_blank">🎥 Link to the setup tutorial video: https://youtu.be/A0T8NDhcKqU</a>
 
 1. **Create and Activate Python Virtual Environment**
 
