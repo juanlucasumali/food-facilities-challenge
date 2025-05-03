@@ -5,3 +5,4 @@ SQLAlchemy==2.0.40
 alembic==1.15.2
 asyncpg==0.30.0
 greenlet==3.2.1
+geoalchemy2==0.17.1

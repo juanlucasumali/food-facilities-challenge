@@ -19,6 +19,10 @@ engine = create_async_engine(DATABASE_URL, echo=False)
 # Create a session factory that makes async sessions from the engine
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
+class Base(DeclarativeBase):
+    """Base class for ORM models."""
+    pass
+
 # This function is used in FastAPI to get a database session
 @asynccontextmanager
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
