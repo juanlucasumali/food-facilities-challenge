@@ -22,7 +22,7 @@ async def test_by_street_status_filter(client):
     r = await client.get("/trucks/by-street", params={"street": "SANSOME", "status": "APPROVED"})
     expected = [
         {
-            "id": 510,
+            "id": 1591820,
             "applicant": "Truly Food & More",
             "status": "APPROVED",
             "address": "217 SANSOME ST",
@@ -30,7 +30,7 @@ async def test_by_street_status_filter(client):
             "longitude": -122.40126969523558
         },
         {
-            "id": 656,
+            "id": 1585966,
             "applicant": "Curry Up Now",
             "status": "APPROVED",
             "address": "727 SANSOME ST",
@@ -47,11 +47,11 @@ async def test_by_street_status_filter(client):
 # Test the nearby endpoint
 @pytest.mark.asyncio
 async def test_nearby(client):
-    r = await client.get("/trucks/nearby", params={"lat": 37.792, "lng": -122.398})
+    r = await client.get("/trucks/nearby", params={"lat": 37.792, "lng": -122.398, "status": "APPROVED"})
     data = r.json()
     expected = [
         {
-            "id": 605,
+            "id": 1568883,
             "applicant": "Senor Sisig",
             "status": "APPROVED",
             "address": "101 CALIFORNIA ST",
@@ -59,7 +59,7 @@ async def test_nearby(client):
             "longitude": -122.39809861316652
         },
         {
-            "id": 512,
+            "id": 1565571,
             "applicant": "MOMO INNOVATION LLC",
             "status": "APPROVED",
             "address": "101 CALIFORNIA ST",
@@ -67,7 +67,7 @@ async def test_nearby(client):
             "longitude": -122.39809861316652
         },
         {
-            "id": 604,
+            "id": 1568997,
             "applicant": "Think is Good Inc.",
             "status": "APPROVED",
             "address": "100 PINE ST",
@@ -75,7 +75,7 @@ async def test_nearby(client):
             "longitude": -122.39897033211076
         },
         {
-            "id": 537,
+            "id": 1577112,
             "applicant": "BOWL'D ACAI, LLC.",
             "status": "APPROVED",
             "address": "111 BATTERY ST",
@@ -83,7 +83,7 @@ async def test_nearby(client):
             "longitude": -122.40014830676716
         },
         {
-            "id": 516,
+            "id": 1565413,
             "applicant": "MOMO INNOVATION LLC",
             "status": "APPROVED",
             "address": "1 BUSH ST",

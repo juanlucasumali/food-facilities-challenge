@@ -7,7 +7,7 @@ class FoodTruck(Base):
     __tablename__ = "food_trucks"
 
     # Columns in the table
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)  # Using locationid from CSV as primary key
     applicant = Column(String)
     status = Column(String)
     address = Column(String)

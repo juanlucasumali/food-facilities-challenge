@@ -31,6 +31,7 @@ async def main():
 
                 # Create a single FoodTruck entry dictionary
                 food_truck_data = dict(
+                    id=int(row["locationid"]),  # Use locationid as the primary key
                     applicant=row["Applicant"],
                     status=row["Status"],
                     address=row["Address"],
