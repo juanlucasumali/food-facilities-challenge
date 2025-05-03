@@ -3,8 +3,10 @@ from sqlalchemy import text, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db import get_db
 from app.models import FoodTruck
+from app.routers import foodtrucks
 
 app = FastAPI(title="SF Food Trucks API", version="0.0.1")
+app.include_router(foodtrucks.router) # register router
 
 # Basic route to check if the app is running
 @app.get("/ping")
